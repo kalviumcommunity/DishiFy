@@ -1,35 +1,59 @@
-// require("dotenv").config();
-// const express = require("express");
-// const mongoose = require("mongoose");
-// const app = express();
-// const PORT = 3001;
+require("dotenv").config();
+const express = require("express");
+const mongoose = require("mongoose");
 
-// // Define a simple /ping route
-// app.get("/ping", (req, res) => {
-//   res.send("pong");
-// });
+const app = express();
+const PORT = process.env.PORT || 5000;
 
-// // Middleware
-// app.use(express.json());
+// Connect to MongoDB
+const connectDB = async () => {
+  try {
+    await mongoose.connect(process.env.MONGO_URI);
+    console.log("MongoDB connected successfully.");
+  } catch (error) {
+    console.error("MongoDB connection error:", error);
+    process.exit(1); // Exit process with failure
+  }
+};
 
-// // MongoDB connection using env
-// const dbURI = process.env.URI;
+// Call the database connection
+connectDB();
 
-// // Connect to MongoDB Atlas
-// // mongoose
-// //   .connect(dbURI)
-// //   .then(() => console.log("Connected to MongoDB"))
-// //   .catch((err) => console.log("Failed to connect to MongoDB:", err));
+// Check MongoDB connection status
+app.get("/", (req, res) => {
+  const connectionStatus = mongoose.connection.readyState;
+  let statusMessage;
 
-// // Define a test route
-// app.get("/", (req, res) => {
-//   res.send("Welcome to the Cookbook Project");
-// });
+  // 0: disconnected, 1: connected, 2: connecting, 3: disconnecting
+  switch (connectionStatus) {
+    case 0:
+      statusMessage = "MongoDB is disconnected";
+      break;
+    case 1:
+      statusMessage = "MongoDB is connected";
+      break;
+    case 2:
+      statusMessage = "MongoDB is connecting";
+      break;
+    case 3:
+      statusMessage = "MongoDB is disconnecting";
+      break;
+    default:
+      statusMessage = "Unknown connection state";
+  }
 
-// // // Start the server
-// // app.listen(PORT, () => {
-// //   console.log(`Server is running on http://localhost:${PORT}`);
-// // });
+  res.send({
+    message: "Welcome to the Cookbook app!",
+    dbStatus: statusMessage,
+  });
+});
 
-// // // Export the app and mongoose connection
-// // module.exports = { app, mongoose };
+// Ping route
+app.get("/ping", (req, res) => {
+  res.send("Server is alive");
+});
+
+// Start the server
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
