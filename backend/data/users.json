@@ -1,0 +1,16 @@
+[
+  {
+    "name": "Foodie 123",
+    "username": "foodie123",
+    "email": "foodie123@example.com",
+    "password": "hashed_password_123",
+    "favoriteRecipes": ["Spaghetti Carbonara", "Chicken Biryani"]
+  },
+  {
+    "name": "Chef Master",
+    "username": "chefmaster",
+    "email": "chefmaster@example.com",
+    "password": "hashed_password_456",
+    "favoriteRecipes": ["Chicken Biryani"]
+  }
+]

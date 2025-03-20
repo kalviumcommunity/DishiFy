@@ -1,0 +1,18 @@
+[
+    {
+      "name": "Spaghetti",
+      "quantity": "200g",
+      "recipe": "Spaghetti Carbonara"
+    },
+    {
+      "name": "Chicken",
+      "quantity": "500g",
+      "recipe": "Chicken Biryani"
+    },
+    {
+      "name": "Rice",
+      "quantity": "300g",
+      "recipe": "Chicken Biryani"
+    }
+  ]
+  

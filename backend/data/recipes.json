@@ -1,0 +1,25 @@
+[
+    {
+      "name": "Spaghetti Bolognese",
+      "ingredients": [],
+      "instructions": "Cook pasta, add sauce...",
+      "time": "45 minutes",
+      "difficulty": "Medium",
+      "category": null,
+      "chef": null,
+      "tags": [],
+      "reviews": []
+    },
+    {
+      "name": "Chicken Tikka Masala",
+      "ingredients": [],
+      "instructions": "Marinate chicken, cook...",
+      "time": "1 hour",
+      "difficulty": "Hard",
+      "category": null,
+      "chef": null,
+      "tags": [],
+      "reviews": []
+    }
+  ]
+  
