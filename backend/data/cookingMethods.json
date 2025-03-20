@@ -1,0 +1,11 @@
+[
+    {
+      "name": "Boiling",
+      "recipes": ["Spaghetti Carbonara"]
+    },
+    {
+      "name": "Slow Cook",
+      "recipes": ["Chicken Biryani"]
+    }
+  ]
+  

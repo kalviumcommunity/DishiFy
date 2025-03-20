@@ -1,0 +1,14 @@
+[
+  {
+    "recipe": "Spaghetti Carbonara",
+    "user": "507f1f77bcf86cd799439011", 
+    "rating": 5,
+    "comment": "Delicious and easy to make!"
+  },
+  {
+    "recipe": "Chicken Biryani",
+    "user": "507f1f77bcf86cd799439012", 
+    "rating": 4,
+    "comment": "Great taste, but needs more spice."
+  }
+]
