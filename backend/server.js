@@ -5,6 +5,11 @@ const mongoose = require("mongoose");
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+app.use(express.json());
+
+// Import routes
+const recipeRoutes = require("./routes"); // <-- This is the new import for routes.js
+
 // Connect to MongoDB
 const connectDB = async () => {
   try {
@@ -52,6 +57,9 @@ app.get("/", (req, res) => {
 app.get("/ping", (req, res) => {
   res.send("Server is alive");
 });
+
+// Use the recipe routes
+app.use("/api", recipeRoutes); // <-- Use the routes at /api/recipes, /api/recipes/:id, etc.
 
 // Start the server
 app.listen(PORT, () => {

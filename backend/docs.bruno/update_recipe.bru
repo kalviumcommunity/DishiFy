@@ -1,0 +1,11 @@
+meta {
+  name: update_recipe
+  type: http
+  seq: 5
+}
+
+put {
+  url: http://localhost:5000/api/recipes/
+  body: none
+  auth: inherit
+}
