@@ -29,7 +29,7 @@ const cookingMethods = require("../data/cookingMethods.json");
 
 // Set up Express server (if needed)
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 8080;
 
 // Ensure MongoDB URI is correctly loaded
 console.log("Mongo URI:", process.env.MONGO_URI);
