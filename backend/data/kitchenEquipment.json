@@ -1,11 +1,10 @@
 [
-    {
-      "name": "Non-stick Pan",
-      "recipes": ["Spaghetti Carbonara"]
-    },
-    {
-      "name": "Pressure Cooker",
-      "recipes": ["Chicken Biryani"]
-    }
-  ]
-  
+  {
+    "name": "Non-stick Pan",
+    "recipes": ["Sphagatti"]
+  },
+  {
+    "name": "Pressure Cooker",
+    "recipes": [" Chicken Biryani"]
+  }
+]

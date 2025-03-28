@@ -1,42 +1,115 @@
+/* Root container styling */
 #root {
   max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
+  background-color: #1e1e1e;
+  color: white;
+  font-family: 'Arial', sans-serif;
+}
+.recipe-container {
+  overflow: visible; /* Ensure overflow is not hiding the content */
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+/* Heading styling */
+h1 {
+  font-size: 3rem;
+  font-weight: bold;
+  margin-bottom: 2rem;
+  color: #f5f5f5;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+/* Search bar styling */
+input[type="text"] {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  border: 2px solid #646cff;
+  border-radius: 8px;
+  width: 50%;
+  margin-right: 1rem;
+  color: #333;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+button {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  background-color: #646cff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
 }
 
-.card {
-  padding: 2em;
+button:hover {
+  background-color: #4c54e6;
 }
 
+/* Recipe list styling */
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+li {
+  margin: 1.5rem 0;
+  background-color: transparent;
+  padding: 1.5rem;
+  text-align: left;
+}
+
+li h2 {
+  font-size: 1.8rem;
+  margin-bottom: 0.5rem;
+  color: #f5f5f5;
+}
+
+li p {
+  color: #ddd;
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+li ul {
+  margin-top: 0.5rem;
+  padding-left: 20px;
+}
+
+li ul li {
+  color: #ccc;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+/* Styling for the ingredients list */
+li h4 {
+  font-size: 1.4rem;
+  color: #f5f5f5;
+  margin-bottom: 0.5rem;
+}
+
+li .ingredients {
+  padding-left: 20px;
+  margin-top: 0.5rem;
+  font-size: 1rem;
+  color: #ccc;
+}
+
+/* Footer message */
 .read-the-docs {
   color: #888;
+  margin-top: 2rem;
+}
+
+/* Responsive styling */
+@media screen and (max-width: 768px) {
+  input[type="text"] {
+    width: 80%;
+  }
+
+  button {
+    width: 80%;
+    margin-top: 1rem;
+  }
 }
