@@ -13,13 +13,12 @@ const reviewSchema = new mongoose.Schema(
       trim: true, // Ensures no unnecessary spaces
     },
     user: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-      required: true,
-      validate: {
-        validator: mongoose.Types.ObjectId.isValid, // Validate ObjectId format
-        message: (props) => `${props.value} is not a valid ObjectId!`,
-      },
+      type: String, // Changed to String instead of ObjectId
+      required: true, // User is required
+    },
+    recipe: {
+      type: String, // Recipe is a String instead of ObjectId
+      required: true, // Recipe is required
     },
   },
   {
@@ -27,4 +26,6 @@ const reviewSchema = new mongoose.Schema(
   }
 );
 
-module.exports = mongoose.model("Review", reviewSchema);
+// Check if the model is already defined to avoid overwriting it
+module.exports =
+  mongoose.models.Review || mongoose.model("Review", reviewSchema);

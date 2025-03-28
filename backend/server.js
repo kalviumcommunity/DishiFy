@@ -1,11 +1,13 @@
 require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
+const cors = require("cors"); // <-- Add CORS
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
 app.use(express.json());
+app.use(cors()); // <-- Use CORS middleware
 
 // Import routes
 const recipeRoutes = require("./routes"); // <-- This is the new import for routes.js

@@ -1,11 +1,10 @@
 [
-    {
-      "name": "Italian",
-      "description": "Traditional Italian cuisine"
-    },
-    {
-      "name": "Indian",
-      "description": "Spicy and flavorful Indian cuisine"
-    }
-  ]
-  
+  {
+    "name": "Italian",
+    "description": "Traditional Italian cuisine"
+  },
+  {
+    "name": "Indian",
+    "description": "Spicy and flavorful Indian cuisine"
+  }
+]
