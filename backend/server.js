@@ -1,16 +1,16 @@
 require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
-const cors = require("cors"); // <-- Add CORS
+const cors = require("cors");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
 app.use(express.json());
-app.use(cors()); // <-- Use CORS middleware
+app.use(cors());
 
 // Import routes
-const recipeRoutes = require("./routes"); // <-- This is the new import for routes.js
+const routes = require("./routes");
 
 // Connect to MongoDB
 const connectDB = async () => {
@@ -19,7 +19,7 @@ const connectDB = async () => {
     console.log("MongoDB connected successfully.");
   } catch (error) {
     console.error("MongoDB connection error:", error);
-    process.exit(1); // Exit process with failure
+    process.exit(1);
   }
 };
 
@@ -31,7 +31,6 @@ app.get("/", (req, res) => {
   const connectionStatus = mongoose.connection.readyState;
   let statusMessage;
 
-  // 0: disconnected, 1: connected, 2: connecting, 3: disconnecting
   switch (connectionStatus) {
     case 0:
       statusMessage = "MongoDB is disconnected";
@@ -60,8 +59,8 @@ app.get("/ping", (req, res) => {
   res.send("Server is alive");
 });
 
-// Use the recipe routes
-app.use("/api", recipeRoutes); // <-- Use the routes at /api/recipes, /api/recipes/:id, etc.
+// Use API routes
+app.use("/api", routes);
 
 // Start the server
 app.listen(PORT, () => {
