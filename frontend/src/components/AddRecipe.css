@@ -2,9 +2,15 @@
   max-width: 800px;
   margin: 2rem auto;
   padding: 2rem;
-  background-color: #f8f9fa;
-  border-radius: 12px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.add-recipe-container h2 {
+  color: #2c3e50;
+  margin-bottom: 2rem;
+  text-align: center;
 }
 
 .recipe-form {
@@ -22,59 +28,70 @@
 .form-group label {
   font-weight: 600;
   color: #2c3e50;
-  font-size: 1.1rem;
 }
 
 .form-group input,
-.form-group textarea,
-.form-group select {
+.form-group select,
+.form-group textarea {
   padding: 0.75rem;
-  border: 2px solid #e0e0e0;
-  border-radius: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
   font-size: 1rem;
-  background-color: white;
-  color: #2c3e50;
-  transition: border-color 0.3s, box-shadow 0.3s;
-}
-
-.form-group input:focus,
-.form-group textarea:focus,
-.form-group select:focus {
-  outline: none;
-  border-color: #4caf50;
-  box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
 }
 
 .form-group textarea {
-  min-height: 120px;
   resize: vertical;
+  min-height: 100px;
 }
 
-.submit-btn {
-  padding: 1rem 2rem;
-  background-color: #4caf50;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 1.1rem;
-  font-weight: 600;
-  transition: background-color 0.3s, transform 0.2s;
+.form-actions {
+  display: flex;
+  gap: 1rem;
   margin-top: 1rem;
 }
 
-.submit-btn:hover {
-  background-color: #45a049;
-  transform: translateY(-2px);
+.submit-button,
+.cancel-button {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
 }
 
-.message {
+.submit-button {
+  background-color: #3498db;
+  color: white;
+}
+
+.submit-button:hover {
+  background-color: #2980b9;
+}
+
+.cancel-button {
+  background-color: #e74c3c;
+  color: white;
+}
+
+.cancel-button:hover {
+  background-color: #c0392b;
+}
+
+.error {
+  background-color: #fde8e8;
+  color: #c53030;
   padding: 1rem;
+  border-radius: 4px;
   margin-bottom: 1rem;
-  border-radius: 8px;
-  background-color: #dff0d8;
-  color: #3c763d;
-  font-weight: 500;
+}
+
+.success {
+  background-color: #e6f4ea;
+  color: #137333;
+  padding: 1rem;
+  border-radius: 4px;
+  margin-bottom: 1rem;
 }
 
 .recipes-list {

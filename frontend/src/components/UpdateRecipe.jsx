@@ -1,132 +1,160 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import "./AddRecipe.css";
 
-function AddRecipe({ onRecipeAdded }) {
+const UpdateRecipe = ({ onRecipeUpdated }) => {
+  const { id } = useParams();
   const navigate = useNavigate();
   
-  // State to store all form data
+  // State for storing recipe data
   const [recipe, setRecipe] = useState({
     name: "",
-    category: "",
-    difficulty: "Medium",
+    ingredients: [],
+    instructions: [],
     time: "",
+    difficulty: "",
+    category: "",
     cookingMethod: "",
+    kitchenEquipment: [],
     chef: "",
-    tags: "",
-    ingredients: "",
-    instructions: "",
-    kitchenEquipment: "",
-    reviews: ""
+    tags: [],
+    reviews: []
   });
   
-  // State for showing messages
+  // UI state
+  const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState("");
   const [isError, setIsError] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
 
-  // Handle input changes
+  // Fetch recipe data when component loads
+  useEffect(() => {
+    const fetchRecipe = async () => {
+      try {
+        // Check if ID is valid
+        if (!id || !id.match(/^[0-9a-fA-F]{24}$/)) {
+          throw new Error(`Invalid recipe ID: ${id}`);
+        }
+        
+        // Fetch recipe from API
+        const response = await fetch(`http://localhost:5000/api/recipes/${id}`);
+        
+        if (!response.ok) {
+          throw new Error(`Error: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        
+        // Get recipe data from response
+        const recipeData = data.data || data;
+        
+        // Convert arrays to strings for form inputs
+        setRecipe({
+          ...recipeData,
+          ingredients: Array.isArray(recipeData.ingredients) ? recipeData.ingredients : [],
+          instructions: Array.isArray(recipeData.instructions) ? recipeData.instructions : [],
+          kitchenEquipment: Array.isArray(recipeData.kitchenEquipment) ? recipeData.kitchenEquipment : [],
+          tags: Array.isArray(recipeData.tags) ? recipeData.tags : [],
+          reviews: Array.isArray(recipeData.reviews) ? recipeData.reviews : []
+        });
+        
+        setLoading(false);
+      } catch (error) {
+        setMessage(error.message || 'Failed to fetch recipe');
+        setIsError(true);
+        setLoading(false);
+      }
+    };
+
+    fetchRecipe();
+  }, [id]);
+
+  // Handle form input changes
   const handleChange = (e) => {
-    // Get the field name and value from the event
     const { name, value } = e.target;
     
-    // Update the recipe state with the new value
-    setRecipe({
-      ...recipe, // Keep all other values the same
-      [name]: value // Update only the field that changed
-    });
+    if (name === 'ingredients' || name === 'instructions' || 
+        name === 'kitchenEquipment' || name === 'tags' || 
+        name === 'reviews') {
+      // Convert text with line breaks to array
+      const arrayValue = value.split('\n').filter(item => item.trim());
+      
+      setRecipe({
+        ...recipe, 
+        [name]: arrayValue
+      });
+    } else if (name === 'time') {
+      // Convert time to number
+      const timeValue = value === '' ? '' : parseInt(value);
+      
+      setRecipe({
+        ...recipe,
+        time: timeValue
+      });
+    } else {
+      setRecipe({
+        ...recipe,
+        [name]: value
+      });
+    }
   };
 
   // Handle form submission
   const handleSubmit = async (e) => {
-    e.preventDefault(); // Prevent the default form submission
-    
-    // Check if required fields are filled
-    if (!recipe.name || !recipe.category || !recipe.time || 
-        !recipe.cookingMethod || !recipe.chef || !recipe.ingredients || 
-        !recipe.instructions) {
-      setMessage("Please fill all required fields");
-      setIsError(true);
-      return;
-    }
+    e.preventDefault();
     
     try {
-      setIsLoading(true);
+      setLoading(true);
       setMessage("");
       setIsError(false);
       
-      // Prepare the data to send to the server
+      // Prepare data for submission
       const recipeData = {
-        name: recipe.name.trim(),
-        category: recipe.category.trim(),
-        time: Number(recipe.time), // Convert string to number
-        difficulty: recipe.difficulty,
-        cookingMethod: recipe.cookingMethod.trim(),
-        chef: recipe.chef.trim(),
-        // Convert comma-separated string to array 
-        tags: recipe.tags.split(',').map(tag => tag.trim()).filter(tag => tag),
-        // Convert newline-separated strings to arrays
-        ingredients: recipe.ingredients.split('\n').map(item => item.trim()).filter(item => item),
-        instructions: recipe.instructions.split('\n').map(item => item.trim()).filter(item => item),
-        kitchenEquipment: recipe.kitchenEquipment.split('\n').map(item => item.trim()).filter(item => item),
-        reviews: recipe.reviews.split('\n').map(item => item.trim()).filter(item => item)
+        ...recipe,
+        time: typeof recipe.time === 'string' ? parseInt(recipe.time) : recipe.time
       };
       
-      // Send the data to the server
-      const response = await fetch("http://localhost:5000/api/recipes", {
-        method: "POST",
+      // Send update request to API
+      const response = await fetch(`http://localhost:5000/api/recipes/${id}`, {
+        method: 'PUT',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify(recipeData),
+        body: JSON.stringify(recipeData)
       });
-
-      // Check if the request was successful
+      
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.message || "Error adding recipe");
+        throw new Error(errorData.message || `Error: ${response.status}`);
       }
-
+      
       // Show success message
-      setMessage("Recipe added successfully!");
+      setMessage("Recipe updated successfully!");
       setIsError(false);
       
-      // Reset form
-      setRecipe({
-        name: "",
-        category: "",
-        difficulty: "Medium",
-        time: "",
-        cookingMethod: "",
-        chef: "",
-        tags: "",
-        ingredients: "",
-        instructions: "",
-        kitchenEquipment: "",
-        reviews: ""
-      });
-      
-      // Refresh recipe list
-      if (onRecipeAdded) {
-        onRecipeAdded();
+      // Call update callback
+      if (onRecipeUpdated) {
+        onRecipeUpdated();
       }
       
-      // Go back to home page after 2 seconds
+      // Navigate back to home page after 2 seconds
       setTimeout(() => {
-        navigate("/");
+        navigate('/');
       }, 2000);
-      
     } catch (error) {
-      setMessage(error.message || "Failed to add recipe");
+      setMessage(error.message || 'Failed to update recipe');
       setIsError(true);
     } finally {
-      setIsLoading(false);
+      setLoading(false);
     }
   };
 
+  if (loading && !recipe.name) {
+    return <div className="loading">Loading recipe data...</div>;
+  }
+
   return (
     <div className="add-recipe-container">
-      <h2>Add New Recipe</h2>
+      <h2>Update Recipe</h2>
       
       {/* Show message if there is one */}
       {message && (
@@ -156,7 +184,7 @@ function AddRecipe({ onRecipeAdded }) {
             type="text"
             id="category"
             name="category"
-            value={recipe.category}
+            value={recipe.category || ""}
             onChange={handleChange}
             required
             placeholder="e.g., Dessert, Main Course, etc."
@@ -169,7 +197,7 @@ function AddRecipe({ onRecipeAdded }) {
           <select
             id="difficulty"
             name="difficulty"
-            value={recipe.difficulty}
+            value={recipe.difficulty || "Medium"}
             onChange={handleChange}
           >
             <option value="Easy">Easy</option>
@@ -185,7 +213,7 @@ function AddRecipe({ onRecipeAdded }) {
             type="number"
             id="time"
             name="time"
-            value={recipe.time}
+            value={recipe.time || ""}
             onChange={handleChange}
             required
             min="1"
@@ -200,7 +228,7 @@ function AddRecipe({ onRecipeAdded }) {
             type="text"
             id="cookingMethod"
             name="cookingMethod"
-            value={recipe.cookingMethod}
+            value={recipe.cookingMethod || ""}
             onChange={handleChange}
             required
             placeholder="e.g., Baking, Frying, etc."
@@ -214,7 +242,7 @@ function AddRecipe({ onRecipeAdded }) {
             type="text"
             id="chef"
             name="chef"
-            value={recipe.chef}
+            value={recipe.chef || ""}
             onChange={handleChange}
             required
             placeholder="Your name or the recipe creator"
@@ -228,8 +256,8 @@ function AddRecipe({ onRecipeAdded }) {
             type="text"
             id="tags"
             name="tags"
-            value={recipe.tags}
-            onChange={handleChange}
+            value={Array.isArray(recipe.tags) ? recipe.tags.join(", ") : ""}
+            onChange={(e) => setRecipe({...recipe, tags: e.target.value.split(",").map(tag => tag.trim()).filter(tag => tag)})}
             placeholder="e.g., healthy, vegan, quick"
           />
         </div>
@@ -240,7 +268,7 @@ function AddRecipe({ onRecipeAdded }) {
           <textarea
             id="ingredients"
             name="ingredients"
-            value={recipe.ingredients}
+            value={Array.isArray(recipe.ingredients) ? recipe.ingredients.join("\n") : ""}
             onChange={handleChange}
             required
             rows="5"
@@ -254,7 +282,7 @@ function AddRecipe({ onRecipeAdded }) {
           <textarea
             id="instructions"
             name="instructions"
-            value={recipe.instructions}
+            value={Array.isArray(recipe.instructions) ? recipe.instructions.join("\n") : ""}
             onChange={handleChange}
             required
             rows="5"
@@ -268,7 +296,7 @@ function AddRecipe({ onRecipeAdded }) {
           <textarea
             id="kitchenEquipment"
             name="kitchenEquipment"
-            value={recipe.kitchenEquipment}
+            value={Array.isArray(recipe.kitchenEquipment) ? recipe.kitchenEquipment.join("\n") : ""}
             onChange={handleChange}
             rows="3"
             placeholder="e.g., Mixing bowl&#10;Whisk&#10;Baking tray"
@@ -281,7 +309,7 @@ function AddRecipe({ onRecipeAdded }) {
           <textarea
             id="reviews"
             name="reviews"
-            value={recipe.reviews}
+            value={Array.isArray(recipe.reviews) ? recipe.reviews.join("\n") : ""}
             onChange={handleChange}
             rows="3"
             placeholder="e.g., Great recipe!&#10;Family loved it&#10;Will make again"
@@ -293,15 +321,15 @@ function AddRecipe({ onRecipeAdded }) {
           <button 
             type="submit" 
             className="submit-button"
-            disabled={isLoading}
+            disabled={loading}
           >
-            {isLoading ? "Adding Recipe..." : "Add Recipe"}
+            {loading ? "Updating Recipe..." : "Update Recipe"}
           </button>
           <button 
             type="button" 
             className="cancel-button"
             onClick={() => navigate("/")}
-            disabled={isLoading}
+            disabled={loading}
           >
             Cancel
           </button>
@@ -309,6 +337,6 @@ function AddRecipe({ onRecipeAdded }) {
       </form>
     </div>
   );
-}
+};
 
-export default AddRecipe;
+export default UpdateRecipe; 
